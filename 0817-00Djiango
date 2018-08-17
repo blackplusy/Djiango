@@ -1,0 +1,65 @@
+Django
+	1、后端，web框架(必须Django的规则进行约定俗成的编写);
+		例如: class MyUser():
+			def __init__():
+		if __name__="__main__":
+			
+	mvc设计模式 分工协作的模式：
+			数据库   前端   后端   整合
+			 数据    展示   逻辑（从数据库里取数据放到前端展示)
+		mvc框架实现的mvc设计模式
+	m model模型 (数据）
+	v view 视图(页面)
+	c controller(逻辑控制）
+	有利于分工协作，团队合作
+	Django的设计模式:
+		mvt设计模式
+		m:model数据模型 ORM 对象关系模型可以让Django自动产生数据库里的表
+		表table user 字段 name age sex
+			update user set age=10 where id=1
+		python class User这个类有属性name age sex
+			age=10
+		v:view视图  前端页面(返回模板，逻辑)
+		t:template模板  页面----->模板
+		改进的mvc模式，m不变，c+v合并变成v 建立独有v的概念 t模板
+	任务:用JDjango建立简单的web网站.
+	Django的工作过程:
+		用户发出请求--->Django服务器view里面方法---->调用数据model------>利用ORM关系模型----->表(select)---->取出记录---->回传给model--->把取得数据告知view---->通过逻辑(比如注册:通过name=,age=,sex=完成数据的操作,如果还需要回传model,再去访问数据库的表,如果不需要，直接到程序最后)。------->去django template里面找模板，找view对应的模板------>模板返回view------>给用户响应（用户看到的界面：template+数据）
+	说明：我们今天案例的图标字体:
+		font-awesome插件
+	  工具开发Pycharm
+     Django的安装
+		安装步骤
+			pip3 install django
+		安装完以后，创建Django项目
+			django-admin startproject 项目名称
+		创建完django框架，创建user应用
+			django-admin startapp 应用名称
+		创建完应用，就有models.py，views.py
+		models.py里面进行数据的创建
+		views.py进行逻辑的编写
+   Django models的创建
+		varchar类型 username=models.CharField(max_length=20)
+		自动创建id
+		我们用mysql，需要修改settins的设置
+		settings.py位置:django项目目录mypro
+				mypro/mypro/settings.py
+		找到DATABASES:
+			改成mysql:django.db.backends.mysql
+			加入:'HOST'='localhost',
+			      'PORT'=3306,
+				'USER'='root',
+				'PASSWORD'='admin'
+				'NAME:你在数据库里建立的数据库名
+		注意:创建数据库时，要用create database mytest default charset=utf8;为了你能够在产生的表里输入中文 .
+		第二步：把你自己的应用放到settings里面的INSTALLED_APPS里面	
+	用python命令产生ORM关系模型
+		python manage.py makemigrations	
+		
+		
+
+
+		
+		 
+		
+	
