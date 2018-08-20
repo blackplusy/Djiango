@@ -73,6 +73,23 @@ python3 manage.py makemigrations
 		password CharField
 	3、开发:
 		(1)产生django框架
+			django-admin startproject mylogin
+		(2)产生django的user运用
+			django-admin startapp user
+		(3) 定义models.py
+			两个成员username password
+		(4)改写settings:
+			INSTALLED_APPS   DATABASES=   TEMPLATES= STATICFILES_DIRS
+		(5)与数据库同步，产生ORM
+			python3 manage.py makemigrations
+			python3 manage.py migrate
+		(6）写views.py
+			定义以上分析的相关方法
+			在方法中写相关的逻辑
+		(7)写urls.py
+			写地址地应的映射
+		(8)运行django框架程序，调试找错误
+			根据浏览器显示的错误内容，或者根据控制台打印或者控制台错误输出
 	4、取出模型中的数据
 		操作模型demo:
 		项目文件夹下:python3 manage.py shell
@@ -83,6 +100,12 @@ python3 manage.py makemigrations
 			例如:User.objects.get(pk=1)根据主键值为1取数据库记录
 	
 	
+		save()没有返回值，None
+	后端完成:
+		1、用户名只能字母、数字
+		2、两次密码输入一致
+		3、需要验证码验证
+		4、协议必须允许
 		
 	
 		
