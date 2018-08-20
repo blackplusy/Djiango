@@ -1,0 +1,89 @@
+操作django常用的django命令
+	django-admin startproject mypro建立一个django的新项目
+	django-admin startapp user建立一个django的新应用
+	python3 manage.py makemigrations同步数据库
+	python3 manage.py migrate同步数据库
+	python3 magage.py runserver运行django框架程序
+python3 manage.py makemigrations
+	问题:1、No MySQLdb
+		解决:import pymysql
+			pymysql.install_as_MySQLdb()
+	     2、 No deteced change.
+		解决:(1）settings里面INSTALLED_APPS=[
+						'user',
+					]
+		    (2) user里面models.py里没有类，类里面没有字段.
+	      
+
+	    3、CSRF post提交错误
+		  settings MIDDLEWARES=[
+			'django.middleware.csrf.CsrfViewMiddleware注释掉	
+			]
+	   4、django=1.8.2
+			#url(r'^admin/',include(admin.site.urls));
+	   5、models.CharField  
+			CharField大写字母位置
+			/charField报错/
+	检查错误:
+	    1、项目文件夹:
+		应用文件夹: models.py view.py
+		项目同名文件夹:settings.py urls.py
+		自己建或pycharm产生的：tmplates模板
+	     2、注意：
+               (1)setttings:有内容的:1)INSTALLED_APP=[]
+				     2)DATABASES=[]里面的内容,
+					：左边的内容全部大写
+					HOST PORT USER PASSWORD NAME
+				     3)STATICFILES_DIRS=[]
+				     4)TEMPLATES=[{
+					DIRS:[os.path.join(BASE_DIR,'templates')]
+					}]
+		(2)urls.py       是否有你的url路径匹配
+				url('register/',views.register)
+				前面的那个值就是url匹配路径,
+				http://localhost:8000/register
+				url地址/后面的内容跟urls.py里面的设置的url前面基本一致
+		(3）models.py  1）有没有class,class继承了models.Model
+			       2)里面字段大写 CharField
+		(4)views.py   1)这里面是def 方法名
+			     2)def后面的名字跟urls.py里url('register/',views.register)
+				后面的views.后面的内容一样
+		             3)必须return render(request,'模板地址')
+完成注册、登录的小功能:
+	1、 命令产生项目，pycharm开发
+	2、分析 ：
+		登录:http://localhost:8000/login 进入登录界面
+		登录提交界面:http://locahost:8000/login_handler提交处理界面
+		注册:http://localhost:8000/register
+		注册提交界面:http://localhost:8000/register_handler
+		成功:http://localhost:8000/success
+	  urls.py
+		/login
+		/login_handler
+		/register
+		/register_handler
+		/success
+	 views.py
+		3个方法
+		login
+		register
+		success
+	models:根据页面也可以看出来，只有两个字段
+		username CharField
+		password CharField
+	3、开发:
+		(1)产生django框架
+	4、取出模型中的数据
+		操作模型demo:
+		项目文件夹下:python3 manage.py shell
+			from user.models import User
+			User.objects.all()查看数据库里是否有内容
+			User.objects.get(条件）根据条件从数据库里取出相应的数据
+			pk表示主键
+			例如:User.objects.get(pk=1)根据主键值为1取数据库记录
+	
+	
+		
+	
+		
+		  
