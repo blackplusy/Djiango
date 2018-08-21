@@ -40,7 +40,70 @@ django models
 	所以在写逻辑的时候用filter，尽量不用get，除非你肯定数据库里有这个数据(电商列表---->详情页)
 	   get出来的是对象 
 	   filter出来的是一个集合
-	   all出来的是一个集合
+	    filter后面的参数可以多个,多个条件同时满足，有','隔开
+	   all()出来的是一个集合
 	   values()出来的是一个集合
+QuerySet对象 ：
+	     filter()合乎条件的集合
+	     all()全部集合
+	     values()全部集合的值
+	     exclude()不合乎条件的集合
+	     order_by()括号里面是按什么字段进行排序，默认是升序，降序加-号
+models对象:
+	     get()符合条件的一个对象
+	     first()第一个对象
+	     last()最后一个对象
+补充:
+	     class Meta():
+		db_table='表名'数据库产生的表名是自定义的表名
+		abstract=True  抽象,执行python3 manage.py makemigrations不会跟数据库同步
+		相当于不产生表（不能永久性存储)
+		抽象的实例化不了，有个类继承它才能使用里面的属性 
+		注意:1、不能永久存储
+		     2、调用里面属性还需要继承后才使用
+		规则:项目组开发的规则-----比如命名的规则,数据使用的规则
+查询:
+	     字符串:精确查询，模糊查询
+		contains包含 
+		字段__contains=    包含什么字符串
+		字段__startswith=	startswith以什么字符串开头
+		字段__endswith=	endswith以什么字符串结尾
+	     数值: 大于，小于 ，大于等于，小于等于
+		    gt   lt      gte      lte
+	     	 字段__gt
+	     日期型
+		查价格20到30之间的书 models.BookInfo.objects.filter(bprice__gt=20,bprice__lt=30)
+		查小于20或者大于30之间的书
+				models.BookInfo.objects.exclude(bprice__gte=20,bprice__lte=30)
+		F查询:本表之间字段和字段之间进行的查询
+		Q查询:
+models延伸
+	读写分离:
+		企业:主从复制结构+事物隔离+锁
+			主数据库  从数据库
+			写(分布式)  读 
+			django实现读写分离
+			1、 settings
+				在DATABASES=[
+				]多加一条数据库
+			 2、在settings里面加一条语句 
+				DATABASE_ROUTERS=[
+				   类名的地址
+				]
+			3、标准在应用下面建一个py文件
+				class 任意命令该类:
+					两个方法必须
+					def db_for_read(self,model,**hints):
+						里面
+						return 读数据库的别名
+					def db_for_write(self,model,**hints):
+						里面
+						return 写数据库的别名
+			4、模拟（建一个与数据库结构相同的数据库):
+					python3 manage.py migrate --database=数据库别名
+
+					注意:数据库别名不用引号引起来，直接等于即可
+
+	
 	
 		
