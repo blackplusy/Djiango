@@ -1,0 +1,46 @@
+django models
+实际工作中研究的更多的是多表
+	书	book
+		字段:书名  varchar-------->CharFiled()字符串类型
+		     出版时间: date------->DateField()日期类型
+		     价格     decimal----->DecimalField()符点类型
+		     作者     varchar------>CharField()字符串类型
+		     出版社    varchar----->CharField()字符串类型
+		     图书缩略图  blob  ---->ImageField()图片类型---->varchar
+		     书目简介    varchar--->CharField()字符串类型
+		     资源获取    email----->EmailField()邮箱类型--->varchar
+		     isDelete 是否删除---->BooleanField()布尔型类型 True False--->tinyint
+					   NullBooleanField()Null布尔型 True False Null
+			整型字段 IntegerField()
+			id    AutoField()
+	        武侠人物 hero
+		     book_id   
+		     人物      varchar---->CharField()字符串类型
+		     技能      varchar--->CharField()字符串类型
+	（1）、当设置成DateField或者是DateTimeField时，可以使用参数auto_now=True
+	 (2)、当设置成DecimalField时，需要设置max_digits=总位数，decimal_places=小数部分位数）
+	 (3)、如果在设置数据库的过程中，该字段可以不输入数据，设置default='',
+	 (4)、如果设置图片的话，设置的参数upload_to=,这是图片上传的路径
+	(5)、两表设置关联链通过models.ForeignKey()，ForeignKey里面的参数是外链的django类名
+		python3引用外键
+			 __init__() missing 1 required positional argument: 'on_delete'
+			解决方法：加on_delete参数
+			hbook=models.ForeignKey(BookInfo,on_delete=models.CASCADE)
+	管理界面:
+		settings:
+			LANGUAGE_CODE = 'zh-hans'
+
+			TIME_ZONE = 'Asia/Shanghai'
+		把注册两个models表放在管理界面上
+			admin.site.register(BookInfo)
+			admin.site.register(HeroInfo)
+		OCR文字识别技术
+	注意:get和filter都是从数据库里面查询内容返回结果，但get一个没有的值会报错，报错影响程序的正常运行，filter不报错，没有的话返回一个空集合.
+		filter查找,len判断filter结果里有没有值
+	所以在写逻辑的时候用filter，尽量不用get，除非你肯定数据库里有这个数据(电商列表---->详情页)
+	   get出来的是对象 
+	   filter出来的是一个集合
+	   all出来的是一个集合
+	   values()出来的是一个集合
+	
+		
