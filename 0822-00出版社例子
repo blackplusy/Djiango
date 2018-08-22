@@ -16,6 +16,62 @@ django聚合函数: aggregate
 django组合函数:
 		annotate
 		相当于group by having
+F查询
+	针对字段和字段之间的值进行比较查询
+		models.Book.objects.filter(id__lt=F('price')).values()
+
+Q查询
+	两个条件组合的查询
+		与: models.Book.objects.filter(Q(price__gt=80) &  Q(price__lt=300)&Q(pk__gt=5))
+		或:models.Book.objects.filter(Q(price__lt=80)|Q(price__gt=300))
+                                                     
+Views 视图
+	urls.py入口
+	url(r'register/',views.register)
+	url前面部分是地址映射,是一个正则表达式
+		正则表达式:
+			以^开头,以$结尾
+			url(r'^register/$',view.register
+				login/     view.register
+			以不定的内容（数字)
+			结合地址 ：http://localhost:8000/(1,2,3,4,6,7,8) views.abc
+				^[0-9]$   只有1位数字，数字范围从0-9
+				中括号表示其中的值取一个就可以
+				[a-z]a,b,c,d.....z小写字母取一位
+				[A-Z]大写字母取一位
+				+号表示超过一位的任意位
+				[0-9]+表示数字组合(0-9)组合，至少是一位
+				*号表示任意位，但*可以没有
+				[0-9]*表示0,9,1,11,任意位匹配的数字都可以，还可以没有这个位
+				^[0-9]*/$   http://localhost:8000/这个地址可以匹配本句
+					    http://localhost:8000/1
+				\d表示数字[0-9]
+				\d+表示多位 
+				\w表示一个单词,遇空格断开
+				\s表示字符串  包含空格
+				[0-9]{5}确定位数，{5}表示5位
+				匹配手机号
+				 ^1[3,4,5,7,8,9][0-9]{9}$
+				匹配邮箱:
+				^\w+@\w+.[a-z0-9]+$
+				匹配身份证
+				^\d{17}[0-9X]$				
+			
+	views两在对象:request      response
+		    HttpRequest     HtttResponse
+			views里每个方法都要返回HttpResponse
+			
+		request传递过来一些参数:
+			path路径
+			method方式
+			POST表单post提交之后的值
+			GET表单get方式交之后的值
+				如果表单中有一个name这样元素，用get取,取出来是一个值
+				如果表单中有多个name,取值时需要都取出来的前提下，用getlist取,获取出来后是一个列表
+				radio也可能多个name,但我只取一个
+				checkbox全取
+			SESSION 
+			COOKIE
 
 
 
@@ -32,9 +88,37 @@ models.Book.objects.all().annotate(au=Count('author')).values('title','au')
 
 统计每个出版社买的最便宜的书的价格
 models.Publisher.objects.all().annotate(num=Min('book__price')).values('name','num')
+首先分出主表是谁，这个题目主表是出版社(以谁为参考)
+models.Publisher.objects.all()
+找出统计的函数 Min('book__price')
+根据主表再根据统计函数得出结果:
+models.Publisher.objects.all().annotate(num=Min('book__price'))
+显示结果:
+models.Publisher.objects.all().annotate(num=Min('book__price')).values('name','num')
 
 统计不止一个作者的图书
+找主体:
+	models.Book.objects.all()
+统计
+	au=Count('author')
+条件
+       filter(au__gt=1)
+显示:
+	.values()
+最后的语句:
+	models.Book.objects.all().annotate(au=Count('author')).filter(au__gt=1).values()
+
 根据一本图书作者数量多少排序
+主体:书
+	models.Book.objects.all()
+后面annotate
+	数量au=Count('author')
+排序
+	order_by('au')
+显示:
+	values()
+
+
 		
 
 	
