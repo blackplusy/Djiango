@@ -1,0 +1,43 @@
+看书、出版社案例:
+	出版社     书      一个出版社对应多个书   一对多关系 多的关系中做ForeignKey
+	作者和作者详细信息   一个作者对应一个详细信息  一对一关系 写在作者里
+						     models.OneToOneField()
+	书和作者           一本书对多个作者
+			   一个作者可能对多本书      多对多关系
+				在任意表中做  models.ManyToManyField()
+	正常情况下，一对多，还是多对多，引用的类一般都写前面
+	如果是后面的类，可以写to='类名'
+统计:
+	select count(*) from student;
+	
+django聚合函数: aggregate
+		Min Max Count Sum Avg
+		count()统计表中元素个数
+django组合函数:
+		annotate
+		相当于group by having
+
+
+
+统计每一本书的作者个数
+models.Book.objects.all().annotate(au=Count('author')).values('title','au')
+models.Book.objects.all()把Book表里的书全部显示,
+		如果你写__str__(self)，显示出里面return的字段
+models.Book.objects.all().annotate(Count('author')）
+		把结果取出，但看不到结果
+把Count('author') 取一个字段名
+models.Book.objects.all().annotate(au=Count('author'))后面的.values显示出所有内容
+如果显示单个字段用values(字段名,字段名)
+models.Book.objects.all().annotate(au=Count('author')).values('title','au')
+
+统计每个出版社买的最便宜的书的价格
+models.Publisher.objects.all().annotate(num=Min('book__price')).values('name','num')
+
+统计不止一个作者的图书
+根据一本图书作者数量多少排序
+		
+
+	
+	
+				
+	
