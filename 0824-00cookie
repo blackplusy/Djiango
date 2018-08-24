@@ -1,0 +1,31 @@
+上传文件:
+	图像文件
+	如果前端页面有图片或文件上传到服务器，首先需要在表单中加入
+		<form enctype="multipart/form-data">
+		加控件<input type="file"/>
+		就需要在request.FILES里找名字 files.name
+		views里面的代码:
+		files=request.FILES.get('pic')
+ 		file=open(os.path.join('static','images',files.name),'wb')
+    		for fp in files.chunks():
+        		file.write(fp)
+    		file.close()
+COOKIE
+	客户端存储临时数据的地方
+	写的时候在response里
+		调用HttpResponse,不能render
+		实现render原理:
+			loader.render_to_string(模板的名字,需要返回页面的字典，request)
+			content = loader.render_to_string('success.html',None,request)
+			hp=HttpResponse(content)
+			hp.set_cookie(键名，键值)
+	取的时候在request里
+			request.COOKIES.get(键名，默认值)
+			name=request.COOKIES.get('user','')
+    			if name!='':
+        			print('success')
+        			return redirect('/success/')
+
+中间件:'django.middleware.csrf.CsrfViewMiddleware', 发送请求------urls.py---中间件---views
+CSRF跨站请求伪造    
+		<form>表单里面实现:{{ csrf_token }}
