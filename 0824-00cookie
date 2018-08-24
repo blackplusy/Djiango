@@ -29,3 +29,34 @@ COOKIE
 中间件:'django.middleware.csrf.CsrfViewMiddleware', 发送请求------urls.py---中间件---views
 CSRF跨站请求伪造    
 		<form>表单里面实现:{{ csrf_token }}
+验证码思路：
+	PIL
+		1、定义一个Image
+		2、用Image.new方法，参数分别是模式('RGB',（宽、高),颜色)
+		   以上颜色可以用元组，(r的值，g的值，b的值)
+		3、定义一个ImageDraw对象
+			ImageDraw对象调用Draw方法画Image
+				ImageDraw.Draw(im)
+		4、画点:用ImageDraw对象的point方法
+			point有两个参数  xy是元组类型的坐标：x的点，y的点
+			                fill=color是点的颜色
+				draw.point(xy,fill=color)
+		5、画线:用ImageDraw对象的line方法
+			画线与点不同的是xy参数有四个值，两个点
+		6、画文字:
+			draw.text(位置，文本，字体，颜色)
+			字体可以用ImageFont的truetype来设置
+				ImageFont.truetype(字体名称，字号)
+			字体名称要用/usr/share/fonts里面的字体
+		7、用io的BytesIO来画
+			buff=BytesIO()
+			将图片im.save(buff,'png')前面是BytesIO对象，后面是'png'格式
+		8、返回HttpResponse对象
+
+			return HttpResponse(buff.getvalue,'image/png')
+		9、用请求http://localhost:8000/verifycode来请求找到该图片
+		10、如果想在网页中访问可以用<img src="请求地址"/>即可
+		11、如果要取回需要再写一个getcode()方法
+			将验证码写入session
+			request.session['code']
+				
