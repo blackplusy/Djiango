@@ -1,0 +1,71 @@
+1、 div和span的区别？
+2、 在html中，position取值有哪几种，默认值是什么？
+3、 前端页面由哪三层构成，分别是什么？作用是什么？
+4、 JavaScript中哪些方法获取元素?
+5、  行内元素有哪些？块级元素有哪些？CSS的盒模型？
+6、 split() join() 的区别？
+7、 ajax请求的时候get 和post方式的区别？
+8、 如何居中div,如何居中一个浮动元素?
+9、 js的几种数据类型？
+10、js创建一个对象？
+11、简述MVC和MTV
+12、F查询和Q查询的作用?
+13、Django重定向是如何实现的？用的什么状态码？
+14、列举django orm 中能获取出结果是QuerySet的方法
+15、filter和exclude的区别?
+16、django orm 中如何设置读写分离？
+17、假设有以下ORM模型：
+	from django.db import models
+
+	class Student(models.Model):
+    	"""学生表"""
+    		name = models.CharField(max_length=100)
+    		gender = models.SmallIntegerField()
+
+    		class Meta:
+        		db_table = 'student'
+
+	class Course(models.Model):
+    	"""课程表"""
+    		name = models.CharField(max_length=100)
+        teacher = models.ForeignKey("Teacher",on_delete=models.SET_NULL,null=True)
+    		class Meta:
+        		db_table = 'course'
+
+	class Score(models.Model):
+    	"""分数表"""
+    		student = models.ForeignKey("Student",on_delete=models.CASCADE)
+    		course = models.ForeignKey("Course",on_delete=models.CASCADE)
+    		number = models.FloatField()
+
+    		class Meta:
+        		db_table = 'score'
+
+	class Teacher(models.Model):
+    	"""老师表"""
+    		name = models.CharField(max_length=100)
+
+    		class Meta:
+        		db_table = 'teacher'
+使用之前学到过的操作实现下面的查询操作：
+1. 查询平均成绩大于60分的同学的id和平均成绩；
+2. 查询所有同学的id、姓名、选课的数量、总成绩；
+3. 查询姓“李”的老师的个数；
+4. 查询没学过“李老师”课的同学的id、姓名；
+5. 查询学过课程id为1和2的所有同学的id、姓名；
+6. 查询学过“黄老师”所教的“所有课”的同学的id、姓名；
+7. 查询所有课程成绩小于60分的同学的id和姓名；
+8. 查询没有学全所有课的同学的id、姓名；
+9. 查询所有学生的姓名、平均分，并且按照平均分从高到低排序；
+10. 查询各科成绩的最高和最低分，以如下形式显示：课程ID，课程名称，最高分，最低分；
+11. 查询没门课程的平均成绩，按照平均成绩进行排序；
+12. 统计总共有多少女生，多少男生；
+13. 将“黄老师”的每一门课程都在原来的基础之上加5分；
+14. 查询两门以上不及格的同学的id、姓名、以及不及格课程数；
+15. 查询每门课的选课人数；
+
+
+
+做完发老师邮箱：291217806@qq.com
+             标题写上自己名字，写上完成时间
+  
