@@ -1,0 +1,80 @@
+学生表Student: name age score_id成绩表
+课程表 course: name teacher_id表
+老师表teacher: name 课程表course_id
+分数表socre:number student_id course_id
+student score
+主体:学生表 id 平均分 
+1. 查询平均成绩大于60分的同学的id和平均成绩
+Avg
+ 针对表的sql语句执行产生上面的效果
+    select student_id,avg(number) from score group by student_id having avg(number)>60
+
+两表建立关联，实际上django做了一件事
+student       score
+       id------>student_id
+注意点:
+	1、aggregate(Avg(score__number))全表聚合，让聚合函数有下效,但不发生group by
+
+	2、annotate(XXXX)---> group by student.pk  having XXXX
+	相当于执行了group by student的主键， 求聚合函数Avg('score__number')
+
+
+ Student.objects.all().annotate(avg=Avg(score__number)).filter(avg__gt=60).values('id','avg')
+注意:
+	1、凡是聚合的现象一定有聚合函数跟它一起作用
+select count(*) from student group by gender
+select max(number) from student;
+
+2. 查询所有同学的id、姓名、选课的数量、总成绩
+	聚合: Count   Sum
+	聚合需要group by
+	每个同学的id,姓名，选课数量，总成绩
+	Student.objects.all().annotate
+	语句:
+	选课数量
+		Count('score__course')
+	总成绩:
+		Sum('score__number')
+	Student.objects.all.annotate(ct=Count('score__course'),sum=Sum('score__number')).values('id','name','ct','sum')
+3. 查询姓“李”的老师的个数；
+	Teacher.objects.filter(name__startswith='李').count()
+4. 查询没学过“李老师”课的同学的id、姓名；
+	Student.objects.all().exclude('score__course__teacher__name="李老师"').values('id','name')
+5. 查询学过课程id为1和2的所有同学的id、姓名；
+	Student.objects.all().filter(Q(score__course__id=1) | Q(score__course__id=2)).distinct().values('id','name')
+	去重distinct()
+	Student.objects.all().filter(score__course__id=1).filter(score__course__id=2).values('id','name')
+6. 查询学过“黄老师”所教的“所有课”的同学的id、姓名；
+先按黄老师进行分组,过滤掉学生总数==黄老师课程总数的id和name
+
+ Student.objects.all().annotate(count=Count('score__course',filter=Q(score__course__teacher__name='黄老师'))).filter(count=Course.objects.filter(teacher__name='黄老师').count()).values('id','name')
+
+
+ Student.objects.all().annotate(count=Count('score__course',Q(score__course__teacher__name='黄老师'))).filter(count=Course.objects.filter(teacher__name='黄老师').count()).values('id','name')
+
+7. 查询所有课程成绩小于60分的同学的id和姓名
+第1种
+Student.objects.all().annotate(max=Max('score__number')).filter(max__lt=60).values('id','name')
+第2种 
+Student.objects.all().exclude(score__number__gte=60)
+第3种 
+Student.objects.all().annotate(count=Count('score__number',filter=Q(score__number__gte=60)).filter(count=0).values('id','name')
+		
+8. 查询没有学全所有课的同学的id、姓名
+	Student.objects.all().annotate(count=Count('score__course')).exclude(count=Course.objects.count()).values('id','name')
+
+9. 查询所有学生的姓名、平均分，并且按照平均分从高到低排序；
+	Student.objects.all().annotate(avg=Avg('score__number')).order_by('-avg').values('name','avg')
+10. 查询各科成绩的最高和最低分，以如下形式显示：课程ID，课程名称，最高分，最低分
+ Course.objects.all().annotate(max=Max('score__number'),min=Min('score__number')).values('id','name','max','min')
+11. 查询没门课程的平均成绩，按照平均成绩进行排序；
+	 Course.objects.all().annotate(avg=Avg('score__number')).order_by('avg').values('id','name','avg')
+12. 统计总共有多少女生，多少男生；
+	Student.objects.all().filter(gender=1).count()
+	Student.objects.all().aggregate(count1=Count('gender',filter=Q(gender=1)),count2=Count('gender',filter=Q(gender=0)))
+13. 将“黄老师”的每一门课程都在原来的基础之上加5分；
+Score.objects.all().filter(course__teacher__name='黄老师').update(number=F(number)+5)
+14. 查询两门以上不及格的同学的id、姓名、以及不及格课程数
+Student.objects.all().annotate(count=Count('score__number',filter=Q(score__number__lt=60))).filter(count__gte=2).values('id','name','count')
+15. 查询每门课的选课人数；
+Course.objects.annotate(count=Count('score')).values('name','count')
