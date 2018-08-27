@@ -41,6 +41,6 @@ select max(number) from student;
 4. 查询没学过“李老师”课的同学的id、姓名；
 	Student.objects.all().exclude('score__course__teacher__name="李老师"').values('id','name')
 5. 查询学过课程id为1和2的所有同学的id、姓名；
-	Stuent.objects.all().filter(score__course__id=1,score__course__id=2).values('id','name')
+	Student.objects.all().filter(score__course__id=1,score__course__id=2).values('id','name')
 
 		
