@@ -38,6 +38,28 @@
 			会员用户
 			金卡用户
 			黑用户
+引用redis来对用户名和密码进和缓存:
+	配置文件settins:
+	CACHES={
+    		'default':{
+            		'BACKEND':'django_redis.cache.RedisCache',
+            		'LOCATION':'redis://localhost:6379',
+            		'OPTIONS':{
+                		'CLIENT_CLASS':'django_redis.client.DefaultClient'
+            		}
+    		}
+	在views里面直接调用
+		cache.set(键,键值,周期)
+		cache.get(键)
+		一般情况下可以设置为1个月
+templates
+	进行修改:
+		减小重码率
+	1、模板是可以继承的，用的关键字extends 
+ 	2、继承模板后不同的部分用{% block 名字 %}{%endblock%}括起来，被继承的和继承都在要需要添加的部分进行block说明
+	模板输入变量 {{变量}}
+	模板里面if语句  {% if 变量(空格)==(空格)常量%}执行的html语句{%endif%}
+	模板里面for主句{% for 变量 in 集合%}中间输出{{变量}},注意{%endfor%}
 			
 			
 		
